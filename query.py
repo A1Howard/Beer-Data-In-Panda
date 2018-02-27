@@ -1,7 +1,7 @@
 
 from _datetime import datetime
 
-filename = '2018-02-26_16:18:25.458346.csv'
+filename = 'Inventories/2018-02-26_16:18:25.458346.csv'
 beer_list = []
 size_list = []
 category_list = []

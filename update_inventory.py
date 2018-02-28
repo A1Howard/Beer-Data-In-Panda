@@ -13,7 +13,7 @@ while True:
 
     filename = str(datetime.datetime.now()).replace(' ', '_') + '.csv'
 
-    out_file = open(filename, 'w')
+    out_file = open('Inventories/' + filename, 'w')
     out_file.write(result.text)
 
     out_file.close()

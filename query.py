@@ -1,14 +1,25 @@
 
 from _datetime import datetime
 
-filename = 'Inventories/2018-02-26_16:18:25.458346.csv'
+filename = '2018-02-28_12:35:40.880574.csv'
 beer_list = []
 size_list = []
 category_list = []
+quantity_list = []
+retail_list = []
+case_retail = []
+case_pack_list = []
 
-with open(filename, 'r+') as f_in:
+d = dict()
+
+with open('Inventories/' + filename, 'r+') as f_in:
+    count = 0
     for line in f_in:
-        line = line.split(',"')
+        if count == 0:
+            count += 1
+            continue
+        line = line.strip()
+        line = line.split(',')
         name = line[0]
         size = line[1]
         category = line[2]
@@ -17,20 +28,23 @@ with open(filename, 'r+') as f_in:
         case_retail_price = line[5]
         case_pack = line[6]
 
-        if name.startswith('"Name'):
-            continue
-        elif name not in beer_list:
-            beer_list.append(name)
+        beer_list.append(name)
+        size_list.append(size)
+        category_list.append(category)
+        quantity_list.append(quantity_available)
+        retail_list.append(retail_price)
+        case_retail.append(case_retail_price)
+        case_pack_list.append(case_pack)
 
-        if size.startswith('size'):
-            continue
-        elif size not in size_list:
-            size_list.append(size)
+d['Name'] = beer_list
+d['Size'] = size_list
+d['Category'] = category_list
+d['Quantity Available'] = quantity_list
+d['Retail Price'] = retail_list
+d['Case Retail Price'] = case_retail
+d['Case Pack'] = case_pack_list
 
-        if category.startswith('Category'):
-            continue
-        elif category not in category_list:
-            category_list.append(category)
+print(d['Category'])
 
 
 date = filename[:19]

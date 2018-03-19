@@ -3,7 +3,6 @@
 
 import requests
 import datetime
-import time
 
 url = 'http://www.tanczos.com/tanczos.com/beerinventory/webexport.csv'
 
@@ -17,7 +16,7 @@ while True:
     out_file.write(result.text)
 
     out_file.close()
-    print("Success.")
+    print("Success... " + filename)
 
     # time.sleep(5)
     break

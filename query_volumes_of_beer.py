@@ -1,81 +1,60 @@
 
-from volume_of_beer_object import VolumePerCategory
+from inventory import Inventory
+from available_inventory import InventoryQueries
+from volume import Volume
 
-filename = '2018-03-11_19:24:51.217556.csv'
-list = []
-
-
-def make_volume_object(string):
-    object = VolumePerCategory(string)
-    list.append(object)
-    return object
+object_list = []
 
 
 def add_volume_by_category(object, size, quantity_available):
-    ounces = object.create_volume_per_single_item(size)
+    ounces = object.get_ounces_per_item(size)
     object.add_volume(ounces, quantity_available)
 
 
 def make_data_frame(filename):
-    beer_list = []
+    query = InventoryQueries(Inventory(filename))
+    available_inventory = query.get_available_inventory()
+
+    name_list = []
     size_list = []
     category_list = []
     quantity_list = []
-    retail_list = []
-    case_retail = []
-    case_pack_list = []
+    price_list = []
     d = dict()
 
-    with open('Inventories/' + filename, 'r+') as f_in:
-        count = 0
-        for line in f_in:
-            if count == 0:
-                count += 1
-                continue
+    for line in available_inventory:
+        make_unique_lists(line['name'], name_list)
+        make_unique_lists(line['size'], size_list)
+        make_unique_lists(line['category'], category_list)
 
-            line = line.split('","')
-            name = line[0].strip('""')
-            size = line[1].strip('""')
-            category = line[2].strip('""')
-            quantity_available = float(line[3].strip('""'))
-            retail_price = float(line[4].strip('""'))
-            case_retail_price = float(line[5].strip('""'))
-            case_pack = float(line[6].strip('"",\n'))
+        price_list.append(line['price'])
+        quantity_list.append(line['quantity'])
 
-            if quantity_available <= 0.00:
-                continue
+        for beer_category in object_list:
+            if beer_category.name_of_object == line['category']:
+                add_volume_by_category(beer_category, line['size'], line['quantity'])
 
-            if category not in category_list:
-                category_list.append(category)
-
-            beer_list.append(name)
-            size_list.append(size)
-            quantity_list.append(quantity_available)
-            retail_list.append(retail_price)
-            case_retail.append(case_retail_price)
-            case_pack_list.append(case_pack)
-
-            for beer_category in list:
-                if beer_category.category == category:
-                    print(size)
-                    add_volume_by_category(beer_category, size, quantity_available)
-
-    d['Name'] = beer_list
-    d['Size'] = size_list
-    d['Category'] = category_list
-    d['Quantity Available'] = quantity_list
-    d['Retail Price'] = retail_list
-    d['Case Retail Price'] = case_retail
-    d['Case Pack'] = case_pack_list
+    add_key_with_value(d, 'Name', name_list)
+    add_key_with_value(d, 'Size', size_list)
+    add_key_with_value(d, 'Category', category_list)
+    add_key_with_value(d, 'Price', price_list)
+    add_key_with_value(d, 'Quantity', quantity_list)
 
     return d
 
 
-cider_category = make_volume_object('CIDER')
-craft_category = make_volume_object('CRAFT')
-domestic_category = make_volume_object('DOMESTIC')
-import_category = make_volume_object('IMPORT')
-malt_category = make_volume_object('MALTERNATIVE')
-mead_category = make_volume_object('MEAD')
+def make_unique_lists(string_to_compare, list):
+    if string_to_compare not in list:
+        list.append(string_to_compare)
+        return list
 
-make_data_frame(filename)
+
+def add_key_with_value(dict, key, value):
+    dict[key] = value
+    return dict
+
+
+def make_volume_object(string):
+    object = Volume(string)
+    object_list.append(object)
+    return object

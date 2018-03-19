@@ -8,8 +8,8 @@ account_sid = "AC4c2291dc257ebc4de7afcda7b91b14b1"
 auth_token = "116bbd76f3f365c0a43b334bf6746367"
 
 client = Client(account_sid, auth_token)
+filename = input('Please input the name of the .csv file: ')
 
-filename = '2018-03-11_19:24:51.217556.csv'
 
 def loop(filename):
     with open(filename, 'r') as f:
@@ -36,5 +36,6 @@ def loop(filename):
                     from_="+17172760528",
                     body="LIONSHEAD BOTTLES Available!")
     f.close()
+
 
 loop(filename)

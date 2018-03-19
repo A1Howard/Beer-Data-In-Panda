@@ -1,11 +1,12 @@
 
-class VolumePerCategory:
+class Category:
 
     def __init__(self, category):
         self.category = category
         self.list_of_volumes = []
+        self.sum = 0
 
-    def create_volume_per_single_item(self, size):
+    def get_ounces_per_item(self, size):
         number_per = 1
         if 'KEG' in size:
             if '1/2' in size:
@@ -122,7 +123,12 @@ class VolumePerCategory:
         self.list_of_volumes.append(x)
 
     def get_volume(self):
-        sum = 0
         for item in self.list_of_volumes:
-            sum += item
-        return sum
+            self.sum += item
+        return self.sum
+
+    def get_beer_type(self):
+        # TODO: return all the styles of the certain category
+
+        return 'idk'
+

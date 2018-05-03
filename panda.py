@@ -1,9 +1,8 @@
-
-import pandas as pd
 import matplotlib.pyplot as plt
 from query_volumes_of_beer import make_volume_object, make_data_frame
 
-filename = 'Inventories/2018-03-19_15:18:43.516286.csv'
+base_dir = 'Inventories/'
+filename = base_dir + input('Enter the name of the .csv file: ')
 
 
 def make_list_of_objects(data_struct):
